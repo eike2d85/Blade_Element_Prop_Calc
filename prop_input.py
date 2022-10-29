@@ -2,23 +2,24 @@ import math
 import numpy as np
 from scipy.interpolate import CubicSpline
 B=2 # Número de Pás
-D=0.31 # Diâmetro em m
+D=1.7526 # Diâmetro em m
 R=D/2 # Raio em m
 R_hub=0.01 # raio do cubo
-R_root=0.015 # raio sem atuação aerodinâmica em m
-RPM=14000 # Velocidade angular em RPM
-omega=2*math.pi*RPM/60 # Velocidade angular em Rad/s
-Vax=1 # Velocidade axial em m/s
-alpha=6.25 # angulo de ataque em graus
-alpha=alpha*math.pi/180
-nperfil='Clark_Y'
-c = np.array([0.02, 0.028, 0.03, 0.028, 0.025, 0.020, 0.016, 0.013, 0.011, 0.01]) # cordas ao longo do raio
-pos_c = np.array([(R_root/R),0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])# posição das cordas em % do raio
+R_root=0.1524 # raio sem atuação aerodinâmica em m
+RPM=2400 # Velocidade angular em RPM
+omega=RPM/60 # Velocidade angular em Rad/s
+Vax=49.1744 # Velocidade axial em m/s
+nperfil='NACA4415'
+c = np.array([0.104364, 0.14036, 0.130119, 0.108783, 0.085222, 0.058308, 0.0]) # cordas ao longo do raio
+beta = np.array([58.3125, 41.8645, 32.2669, 22.2978, 18.7971, 15.9619, 13.8552]) # angulos de torção ao longo do raio
+pos_c = np.array([(R_root/R),0.311583,0.449287,0.586957,0.724626,0.86233,1])# posição das cordas em % do raio
 pos_c = pos_c * R # posição real das cordas ao longo do raio em m
 C = CubicSpline(pos_c, c, bc_type='not-a-knot')
-c = C(pos_c) # cordas ao longo do raio após ajuste polinomial em m
-
+Beta = CubicSpline(pos_c, beta, bc_type='not-a-knot')
+c = C(pos_c) # cordas ao longo do raio após ajuste por spline em m
+beta = Beta(pos_c) # torção ao longo do raio após ajuste por spline em graus
+Cl = 0.7
 
 def prop_input():
-    Parameters = [B, D, R, R_hub, R_root, RPM, omega, Vax, alpha, nperfil, c, pos_c, C]
+    Parameters = [B, D, R, R_hub, R_root, RPM, omega, Vax, beta, nperfil, c, pos_c, C, Cl]
     return Parameters
