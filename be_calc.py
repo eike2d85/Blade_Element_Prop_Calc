@@ -16,7 +16,7 @@ def be_calc(v_som,mi,rho,r,Vax,omega,Beta,nperfil,B,C,R,R_hub):
     i = 1
     max_iter = 100
     phi_error = 1
-    phi_tolerance = 0.000001
+    phi_tolerance = 0.00000001
 
     while phi_error > phi_tolerance and i < max_iter:
         if jureg ==0:
