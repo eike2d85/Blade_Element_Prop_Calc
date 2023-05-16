@@ -17,6 +17,12 @@ def airfoil_data_get(nperfil, alpha, Re):
     if Re>Re_max:
         Re=Re_max
         print('Reynolds maior que banco de dados')
+
+    if alpha > 14:
+        alpha = 13
+    if alpha <0:
+        alpha = 0
+    
     j=0
     for Rey in H_bisco_Re:
         if Re >= Rey:

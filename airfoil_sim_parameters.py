@@ -4,10 +4,10 @@ Re_min = 4000
 Re_max = 1205000
 Re_step =200000
 alpha_i = 0
-alpha_f = 20
+alpha_f = 25
 alpha_step = 1
 n_iter = 100
-airfoil_list = ['NACA2412', 'Clark_Y', 'NACA4415']
+airfoil_list = ['NACA4415']
 qtd_airfoil = (len(airfoil_list))
 
 def airfoil_sim_parameters():

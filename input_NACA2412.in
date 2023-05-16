@@ -7,7 +7,7 @@ PACC
 NACA2412Re1404000.txt
 
 ITER 100
-ASeq 0 20 1
+ASeq 0 25 1
 
 
 quit

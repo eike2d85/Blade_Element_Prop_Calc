@@ -30,10 +30,10 @@ sigma = B*corda/2*np.pi*r
 jureg = 0
 i = 1
 max_iter = 50
-Cl_error = 1
-Cl_tolerance = 0.005
+phi_error = 1
+phi_tolerance = 0.005
 
-while Cl_error > Cl_tolerance and i < max_iter:
+while phi_error > phi_tolerance and i < max_iter:
     if jureg ==0:
         phi = np.arctan(_lambda/csi)
         a = 0
@@ -54,12 +54,15 @@ while Cl_error > Cl_tolerance and i < max_iter:
     F = (2/np.pi)*np.arccos(np.exp(-f))
     a = sigma*K/(F-(sigma*K))
     a_linha = sigma*K_linha/(F+sigma*K_linha)
+    phi_old = phi
     phi = np.arctan((Vax*(1+a))/(Vr*(1-a_linha)))
-    print(abs(Cl_new-Cl))
+    phi_error = abs(phi-phi_old)
+    
+    print(phi_error)
     jureg = jureg + 1
     i=i+1
 
-
+print(phi*180/np.pi)
 
 # W = Vax*(1-a)/np.sin(phi)
 dT = 0.5*rho*W**2*B*corda*Cy
