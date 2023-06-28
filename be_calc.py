@@ -3,11 +3,12 @@ import numpy as np
 from airfoil_data_get import *
 from scipy.optimize import bisect
 from phi_bisec import phi_bisec
+from airfoil_data import airfoil_data
 k = 0.7
 def be_calc(v_som,mi,rho,r,Vax,omega,Beta,nperfil,B,C,R,R_hub):
     corda = C(r)
-    if corda<0:
-        corda = 0.010
+    if corda<=0:
+        corda = 0.001
     csi = r/R
     Vr = omega*r  # em m/s
     _lambda = Vax/Vr
@@ -16,30 +17,18 @@ def be_calc(v_som,mi,rho,r,Vax,omega,Beta,nperfil,B,C,R,R_hub):
     i = 1
     max_iter = 100
     phi_error = 1
-    phi_tolerance = 0.00000001
+    phi_tolerance = 0.000001
 
     while phi_error > phi_tolerance and i < max_iter:
         if jureg ==0:
             phi = np.arctan(_lambda)
             W = Vax/np.sin(phi) 
-        '''
-        else:
-            a = sigma*K/(F-(sigma*K))
-            phi = np.arctan((Vax*(1+a))/(Vr*(1-a_linha)))
-            '''
         alpha = (Beta(r)*np.pi/180)-phi
-        '''
-        if alpha> 12*np.pi/180:
-            alpha = 12*np.pi/180
-        if alpha < 0:
-            alpha = 0
-        '''
-        
         Re = W*corda/mi
         #Cl,Cd,Cdp = airfoil_data_get(nperfil, alpha, Re) # fazer convergir o Cl novo com o Cl inputado
         #Cd = Cd+Cdp
-        Cl=0.7
-        Cd = 0.035
+        #Cd = 0.017
+        Cl, Cd, aoa_stall = airfoil_data(nperfil, alpha, Re)
         #Cl = 0.0887*(alpha*180/np.pi)+0.3497
         #Cd = 0.0024*(alpha*180/np.pi)+0.0178
         Cy=(Cl*np.cos(phi)-Cd*np.sin(phi)) 
@@ -77,4 +66,4 @@ def be_calc(v_som,mi,rho,r,Vax,omega,Beta,nperfil,B,C,R,R_hub):
     if (W/v_som)>0.8:
         print('Mach>0.8 quando raio=',r)
 
-    return dT,dQ,corda,(Beta(r)*np.pi/180), phi*180/np.pi, a , a_linha
+    return dT,dQ,corda,(Beta(r)*np.pi/180), phi*180/np.pi, a , a_linha, alpha, Cl
